@@ -147,6 +147,32 @@ function formatTwoDigits(value: number) {
   return String(value).padStart(2, "0");
 }
 
+/* ── Touch swipe hook for gallery ──────── */
+
+function useTouchSwipe(onSwipeLeft: () => void, onSwipeRight: () => void, threshold = 50) {
+  const startX = useRef(0);
+  const endX = useRef(0);
+
+  const onTouchStart = useCallback((event: React.TouchEvent) => {
+    startX.current = event.touches[0].clientX;
+    endX.current = event.touches[0].clientX;
+  }, []);
+
+  const onTouchMove = useCallback((event: React.TouchEvent) => {
+    endX.current = event.touches[0].clientX;
+  }, []);
+
+  const onTouchEnd = useCallback(() => {
+    const diff = startX.current - endX.current;
+    if (Math.abs(diff) > threshold) {
+      if (diff > 0) onSwipeLeft();
+      else onSwipeRight();
+    }
+  }, [onSwipeLeft, onSwipeRight, threshold]);
+
+  return { onTouchStart, onTouchMove, onTouchEnd };
+}
+
 export function ShuaCard() {
   const [active, setActive] = useState<DockPanel | null>(null);
   const [opened, setOpened] = useState(false);
@@ -535,11 +561,15 @@ function HorizontalImageStack() {
     return () => window.removeEventListener("resize", onResize);
   }, [active, syncOffset]);
 
-  const goTo = (index: number) => {
+  const goTo = useCallback((index: number) => {
     const next = Math.max(0, Math.min(galleryImages.length - 1, index));
     setActive(next);
     syncOffset(next);
-  };
+  }, [syncOffset]);
+
+  const swipeNext = useCallback(() => goTo(active + 1), [active, goTo]);
+  const swipePrev = useCallback(() => goTo(active - 1), [active, goTo]);
+  const swipeHandlers = useTouchSwipe(swipeNext, swipePrev);
 
   return (
     <section
@@ -557,6 +587,7 @@ function HorizontalImageStack() {
           goTo(active + 1);
         }
       }}
+      {...swipeHandlers}
     >
       <div ref={trackRef} className={styles.horizontalImageTrack} style={{ marginLeft: `-${offset}px` }}>
         {galleryImages.map((image) => (

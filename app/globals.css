@@ -1,7 +1,19 @@
+/* ============================================
+   GLOBALS — Base styles & resets
+   Nashuha & Shafiq Wedding Card
+   ============================================ */
+
 :root {
   --font-kad-serif: Georgia, "Times New Roman", serif;
   --font-kad-script: "Segoe Script", "Brush Script MT", cursive;
   --font-kad-sans: "Trebuchet MS", "Gill Sans", sans-serif;
+
+  /* Shared palette tokens for future theming */
+  --kad-bg-dark: #2f0714;
+  --kad-bg-deep: #4a0611;
+  --kad-accent-gold: rgba(196, 157, 96, 0.2);
+  --kad-text-primary: #5d1733;
+  --kad-text-secondary: #714058;
 }
 
 * {
@@ -10,16 +22,44 @@
 
 html {
   min-height: 100%;
-  background: #2f0714;
+  background: var(--kad-bg-dark);
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
   min-height: 100%;
   margin: 0;
-  background: #2f0714;
+  background: var(--kad-bg-dark);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 button,
 a {
   -webkit-tap-highlight-color: transparent;
+}
+
+/* Premium text selection */
+::selection {
+  background: rgba(132, 41, 68, 0.28);
+  color: #3d0a1e;
+}
+
+::-moz-selection {
+  background: rgba(132, 41, 68, 0.28);
+  color: #3d0a1e;
+}
+
+/* Smooth scroll anchors with proper offset */
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
 }

@@ -1,17 +1,34 @@
+/* ============================================
+   Shua Wedding Card — Premium Styles
+   Nashuha & Shafiq Digital Invitation
+   ============================================ */
+
 .page {
   --shua-button-bg: #842944;
   --shua-button-ink: #fff4d6;
   --shua-button-border: rgba(255, 244, 217, .46);
+  --shua-gold: #c49d60;
+  --shua-gold-soft: rgba(196, 157, 96, .2);
+  --shua-wine: #5d1733;
+  --shua-wine-deep: #4a0611;
+  --shua-rose: #fff5f9;
+  --shua-cream: #fffafc;
+  --shua-radius: 18px;
+  --shua-ease: cubic-bezier(.16, 1, .3, 1);
+  --shua-bounce: cubic-bezier(.32, .72, 0, 1);
 
   min-height: 100dvh;
   overflow-x: hidden;
   background:
-    radial-gradient(circle at top, rgba(196, 157, 96, .2), transparent 32%),
-    linear-gradient(135deg, rgba(47, 3, 18, .97), rgba(18, 3, 8, .99) 52%, rgba(76, 13, 30, .97)),
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(196, 157, 96, .15), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(132, 41, 68, .12), transparent),
+    linear-gradient(165deg, rgba(47, 3, 18, .97), rgba(18, 3, 8, .99) 52%, rgba(76, 13, 30, .97)),
     #2f0714;
   color: #4d1730;
   font-family: var(--font-kad-serif), Georgia, serif;
 }
+
+/* ── Device Shell ───────────────────────── */
 
 .deviceShell {
   min-height: 100dvh;
@@ -31,12 +48,14 @@
   max-width: 430px;
   min-height: 100dvh;
   overflow: clip;
-  border: 1px solid rgba(255, 241, 207, .32);
+  border: 1px solid rgba(255, 241, 207, .24);
   border-radius: 34px;
-  background: #4a0611;
+  background: var(--shua-wine-deep);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, .18),
-    0 34px 90px rgba(0, 0, 0, .36);
+    inset 0 1px 0 rgba(255, 255, 255, .14),
+    0 0 0 1px rgba(196, 157, 96, .08),
+    0 34px 90px rgba(0, 0, 0, .36),
+    0 0 120px rgba(132, 41, 68, .08);
 }
 
 .deviceCore :global(.persistent-youtube-player) {
@@ -51,10 +70,12 @@
   pointer-events: none;
 }
 
+/* ── Card ───────────────────────────────── */
+
 .card {
   position: relative;
   overflow-x: hidden;
-  background: #4a0611;
+  background: var(--shua-wine-deep);
 }
 
 .openingPage,
@@ -65,14 +86,10 @@
   width: 100%;
   overflow: hidden;
   isolation: isolate;
-}
-
-.openingPage,
-.invitationTextPage,
-.eventFlowPage,
-.closingPage {
   min-height: 100dvh;
 }
+
+/* ── Full Image Backgrounds ─────────────── */
 
 .fullImage {
   display: block;
@@ -91,6 +108,7 @@
   object-fit: cover;
 }
 
+/* Section overlays */
 .openingPage::after,
 .invitationTextPage::after,
 .eventFlowPage::after,
@@ -102,16 +120,20 @@
   pointer-events: none;
 }
 
+/* ── Opening Gate ───────────────────────── */
+
 .openingPage::after {
-  background: linear-gradient(180deg, rgba(255, 250, 247, .18), rgba(78, 26, 60, .18));
+  background:
+    radial-gradient(ellipse 70% 40% at 50% 35%, rgba(196, 157, 96, .06), transparent),
+    linear-gradient(180deg, rgba(255, 250, 247, .18), rgba(78, 26, 60, .18));
   opacity: 1;
-  transition: opacity 920ms cubic-bezier(.16, 1, .3, 1);
+  transition: opacity 920ms var(--shua-ease);
 }
 
 .openingRevealImage {
   transform: scale(1.026);
   transform-origin: center;
-  transition: transform 1020ms cubic-bezier(.16, 1, .3, 1);
+  transition: transform 1020ms var(--shua-ease);
 }
 
 .openingPage[data-opened="true"]::after {
@@ -122,6 +144,7 @@
   transform: scale(1);
 }
 
+/* Gate panels with premium texture */
 .gatePanels {
   position: absolute;
   inset: 0;
@@ -146,9 +169,23 @@
     inset 0 0 58px rgba(116, 35, 68, .08),
     0 0 22px rgba(50, 2, 16, .1);
   transition:
-    transform 960ms cubic-bezier(.16, 1, .3, 1),
+    transform 960ms var(--shua-ease),
     opacity 760ms ease;
   will-change: transform, opacity;
+}
+
+.gatePanel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(196, 157, 96, .06) 0%,
+    transparent 20%,
+    transparent 80%,
+    rgba(196, 157, 96, .04) 100%
+  );
+  pointer-events: none;
 }
 
 .gatePanel::after {
@@ -184,6 +221,8 @@
   opacity: .08;
 }
 
+/* ── Opening Content ────────────────────── */
+
 .openingContent,
 .closingContent {
   position: relative;
@@ -197,12 +236,12 @@
 }
 
 .openingContent {
-  gap: 24px;
+  gap: 28px;
   align-content: center;
-  color: #5d1733;
+  color: var(--shua-wine);
   transition:
-    opacity 520ms cubic-bezier(.16, 1, .3, 1),
-    transform 520ms cubic-bezier(.16, 1, .3, 1);
+    opacity 520ms var(--shua-ease),
+    transform 520ms var(--shua-ease);
 }
 
 .openingPage[data-opened="true"] .openingContent {
@@ -210,6 +249,8 @@
   pointer-events: none;
   transform: translateY(-10px) scale(.985);
 }
+
+/* ── Opening Seal — Premium glass effect ── */
 
 .openingSeal {
   width: min(58vw, 226px);
@@ -220,8 +261,31 @@
   background:
     radial-gradient(circle at 40% 34%, rgba(255, 255, 255, .98), #fff 68%, rgba(255, 255, 255, .92));
   box-shadow:
+    0 0 0 1px rgba(196, 157, 96, .18),
+    0 0 30px rgba(196, 157, 96, .08),
     0 26px 48px rgba(56, 45, 106, .18),
     0 4px 14px rgba(111, 33, 63, .08);
+  animation: sealFloat 6s ease-in-out infinite;
+}
+
+.openingSeal h1 {
+  margin: 0;
+  display: grid;
+  gap: 2px;
+  color: var(--shua-wine);
+  font-family: var(--font-kad-script), "Segoe Script", cursive;
+  font-size: clamp(34px, 10vw, 47px);
+  font-weight: 400;
+  line-height: .92;
+  text-align: center;
+}
+
+.openingSeal h1 span:nth-child(2) {
+  color: var(--shua-gold);
+  font-family: var(--font-kad-serif), Georgia, serif;
+  font-size: .5em;
+  font-weight: 500;
+  line-height: .8;
 }
 
 .sectionEyebrow {
@@ -232,28 +296,11 @@
   text-transform: uppercase;
 }
 
-.openingSeal h1 {
-  margin: 0;
-  display: grid;
-  gap: 2px;
-  color: #5d1733;
-  font-family: var(--font-kad-script), "Segoe Script", cursive;
-  font-size: clamp(34px, 10vw, 47px);
-  font-weight: 400;
-  line-height: .92;
-  text-align: center;
-}
-
-.openingSeal h1 span:nth-child(2) {
-  color: #7c4058;
-  font-family: var(--font-kad-serif), Georgia, serif;
-  font-size: .5em;
-  font-weight: 500;
-  line-height: .8;
-}
+/* ── Open Button — Shimmer effect ───────── */
 
 .openButton,
 .inlineAction {
+  position: relative;
   min-height: 48px;
   border: 1px solid var(--shua-button-border);
   border-radius: 999px;
@@ -269,9 +316,29 @@
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, .24),
     0 18px 36px rgba(41, 0, 11, .34);
+  overflow: hidden;
   transition:
-    transform 220ms cubic-bezier(.32, .72, 0, 1),
-    filter 220ms cubic-bezier(.32, .72, 0, 1);
+    transform 220ms var(--shua-bounce),
+    filter 220ms var(--shua-bounce),
+    box-shadow 220ms var(--shua-bounce);
+}
+
+.openButton::before,
+.gradientAction::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    105deg,
+    transparent 38%,
+    rgba(255, 244, 217, .12) 44%,
+    rgba(255, 244, 217, .18) 50%,
+    transparent 56%
+  );
+  background-size: 240% 100%;
+  animation: shimmer 3.4s ease-in-out infinite;
+  pointer-events: none;
 }
 
 .openButton {
@@ -280,13 +347,19 @@
   margin-top: 0;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, .24),
+    0 0 24px rgba(196, 157, 96, .12),
     0 16px 30px rgba(49, 4, 16, .24);
+  animation: pulseGlow 3s ease-in-out infinite;
 }
 
 .openButton:hover,
 .inlineAction:hover,
 .gradientAction:hover {
-  filter: brightness(1.05);
+  filter: brightness(1.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .28),
+    0 0 32px rgba(196, 157, 96, .16),
+    0 20px 40px rgba(49, 4, 16, .28);
 }
 
 .openButton:active,
@@ -297,6 +370,8 @@
 .roundAction:active {
   transform: scale(.97);
 }
+
+/* ── Invitation Text Page ───────────────── */
 
 .invitationTextPage {
   display: grid;
@@ -311,50 +386,48 @@
     radial-gradient(circle at 50% 48%, rgba(255, 250, 241, .54), transparent 58%);
 }
 
+/* ── Invitation Panel — Frosted glass ───── */
+
 .invitationPanel {
   width: min(100%, 344px);
   position: relative;
   z-index: 1;
   display: grid;
   gap: 13px;
-  border: 1px solid rgba(116, 35, 68, .16);
-  border-radius: 18px;
-  background: rgba(255, 250, 244, .74);
+  border: 1px solid rgba(196, 157, 96, .18);
+  border-radius: var(--shua-radius);
+  background: rgba(255, 250, 244, .78);
   color: #561a33;
   padding: clamp(22px, 6vw, 30px) clamp(18px, 5vw, 26px);
   text-align: center;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, .56),
+    0 0 0 1px rgba(196, 157, 96, .06),
     0 20px 54px rgba(86, 26, 51, .12);
-  backdrop-filter: blur(7px);
+  backdrop-filter: blur(12px) saturate(120%);
 }
 
 .invitationPanel > * {
-  animation: textRise 560ms cubic-bezier(.16, 1, .3, 1) both;
+  animation: textRise 560ms var(--shua-ease) both;
 }
 
-.invitationPanel > *:nth-child(2) {
-  animation-delay: 60ms;
-}
+.invitationPanel > *:nth-child(2) { animation-delay: 60ms; }
+.invitationPanel > *:nth-child(3) { animation-delay: 120ms; }
+.invitationPanel > *:nth-child(4) { animation-delay: 180ms; }
+.invitationPanel > *:nth-child(5) { animation-delay: 240ms; }
+.invitationPanel > *:nth-child(6) { animation-delay: 300ms; }
+.invitationPanel > *:nth-child(7) { animation-delay: 360ms; }
 
-.invitationPanel > *:nth-child(3) {
-  animation-delay: 120ms;
-}
-
-.invitationPanel > *:nth-child(4) {
-  animation-delay: 180ms;
-}
-
-.invitationPanel > *:nth-child(5) {
-  animation-delay: 240ms;
-}
-
-.invitationPanel > *:nth-child(6) {
-  animation-delay: 300ms;
-}
-
-.invitationPanel > *:nth-child(7) {
-  animation-delay: 360ms;
+/* Gold accent line */
+.invitationPanel::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--shua-gold), transparent);
+  border-radius: 1px;
 }
 
 .hostNames,
@@ -372,7 +445,7 @@
 
 .hostNames span:nth-child(2),
 .coupleNames span:nth-child(2) {
-  color: #9d6a28;
+  color: var(--shua-gold);
   font-family: var(--font-kad-script), "Segoe Script", cursive;
   font-size: 1.38em;
   font-weight: 400;
@@ -398,11 +471,12 @@
 
 .guestDots {
   overflow: hidden;
-  color: #8b6171;
+  color: var(--shua-gold);
   font-family: "Courier New", monospace;
   font-size: 12px;
   line-height: 1;
   white-space: nowrap;
+  opacity: .6;
 }
 
 .coupleNames {
@@ -411,13 +485,16 @@
   font-weight: 800;
 }
 
+/* ── Event Flow Page ────────────────────── */
+
 .eventFlowPage {
   padding: 86px 20px 136px;
 }
 
 .eventFlowPage::after,
 .closingPage::after {
-  background: linear-gradient(180deg, rgba(255, 250, 242, .18), rgba(255, 250, 242, .38));
+  background:
+    linear-gradient(180deg, rgba(255, 250, 242, .18), rgba(255, 250, 242, .38));
 }
 
 .flowContent {
@@ -444,7 +521,10 @@
   color: #711f40;
   font-size: clamp(27px, 8vw, 38px);
   letter-spacing: .01em;
+  animation: textRise 600ms var(--shua-ease) both;
 }
+
+/* ── Kad Sections ───────────────────────── */
 
 .kadSection {
   position: relative;
@@ -466,6 +546,16 @@
   text-transform: uppercase;
 }
 
+/* Gold underline accent for section labels */
+.sectionLabel::after {
+  content: "";
+  display: block;
+  width: 32px;
+  height: 1px;
+  margin: 8px auto 0;
+  background: linear-gradient(90deg, transparent, var(--shua-gold), transparent);
+}
+
 .kadSection strong,
 .kadSection span {
   display: block;
@@ -484,17 +574,37 @@
   line-height: 1.45;
 }
 
+/* ── Event Card — Glass card ────────────── */
+
 .eventCard {
   margin: 0 0 10px;
-  border: 1px solid rgba(116, 35, 68, .14);
-  background: rgba(255, 255, 255, .66);
-  box-shadow: 0 18px 45px rgba(86, 26, 51, .1);
-  backdrop-filter: blur(7px);
+  border: 1px solid rgba(196, 157, 96, .14);
+  border-radius: var(--shua-radius);
+  background: rgba(255, 255, 255, .72);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .6),
+    0 0 0 1px rgba(196, 157, 96, .05),
+    0 18px 45px rgba(86, 26, 51, .1);
+  backdrop-filter: blur(10px) saturate(120%);
+}
+
+/* Gold top accent on event card */
+.eventCard::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 15%;
+  right: 15%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--shua-gold), transparent);
+  border-radius: 1px;
 }
 
 .eventCard h3 {
   font-size: 24px;
 }
+
+/* ── Countdown ──────────────────────────── */
 
 .countdownSection {
   padding-top: 24px;
@@ -515,13 +625,21 @@
   place-items: center;
   align-content: center;
   gap: 4px;
-  border: 1px solid rgba(255, 255, 255, .78);
-  border-radius: 10px;
-  background: rgba(255, 255, 255, .72);
+  border: 1px solid rgba(196, 157, 96, .18);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .76);
   padding: 9px 2px 8px;
   text-align: center;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .86), 0 7px 18px rgba(50, 40, 70, .1);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .86),
+    0 0 12px rgba(196, 157, 96, .06),
+    0 7px 18px rgba(50, 40, 70, .1);
   backdrop-filter: blur(12px) saturate(140%);
+  transition: transform 300ms var(--shua-bounce);
+}
+
+.countdownGrid div:hover {
+  transform: translateY(-2px);
 }
 
 .countdownGrid strong,
@@ -546,6 +664,8 @@
   letter-spacing: .06em;
   text-transform: uppercase;
 }
+
+/* ── Gallery ────────────────────────────── */
 
 .gallerySection {
   padding-inline: 24px;
@@ -573,7 +693,7 @@
   gap: 10px;
   overflow: visible;
   padding: 4px 16% 8px 0;
-  transition: margin-left 360ms cubic-bezier(.16, 1, .3, 1);
+  transition: margin-left 360ms var(--shua-ease);
   will-change: margin-left;
 }
 
@@ -583,9 +703,17 @@
   aspect-ratio: 4 / 5;
   margin: 0;
   overflow: hidden;
-  border-radius: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(196, 157, 96, .12);
   background: #e9e2ef;
-  box-shadow: 0 14px 34px rgba(48, 43, 99, .14);
+  box-shadow:
+    0 0 0 1px rgba(196, 157, 96, .04),
+    0 14px 34px rgba(48, 43, 99, .14);
+  transition: transform 400ms var(--shua-bounce);
+}
+
+.horizontalImageFigure:hover {
+  transform: scale(1.01);
 }
 
 .horizontalImageFigure img {
@@ -593,6 +721,11 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 600ms var(--shua-ease);
+}
+
+.horizontalImageFigure:hover img {
+  transform: scale(1.03);
 }
 
 .horizontalImageFigure figcaption {
@@ -630,6 +763,14 @@
   background: var(--shua-button-bg);
   color: var(--shua-button-ink);
   cursor: pointer;
+  transition:
+    transform 220ms var(--shua-bounce),
+    box-shadow 220ms var(--shua-bounce);
+}
+
+.horizontalImageFooter button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(49, 4, 16, .2);
 }
 
 .horizontalImageFooter button:disabled {
@@ -637,11 +778,14 @@
   opacity: .36;
 }
 
+/* ── Wishes Preview ─────────────────────── */
+
 .wishesPreview article {
   width: 100%;
-  border-top: 1px solid rgba(121, 34, 69, .12);
+  border-top: 1px solid rgba(196, 157, 96, .12);
   padding-top: 10px;
   text-align: left;
+  animation: textRise 400ms var(--shua-ease) both;
 }
 
 .wishesPreview p {
@@ -649,12 +793,15 @@
   color: #70324d;
   font-size: 14px;
   line-height: 1.45;
+  font-style: italic;
 }
 
 .wishesPreview strong {
   color: #631a36;
   font-size: 13px;
 }
+
+/* ── Closing Page ───────────────────────── */
 
 .closingContent {
   align-content: end;
@@ -692,6 +839,8 @@
   text-decoration: none;
 }
 
+/* ── Bottom Dock ────────────────────────── */
+
 .dock {
   position: fixed;
   z-index: 30;
@@ -710,8 +859,10 @@
   padding: 6px;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, .24),
+    0 0 20px rgba(196, 157, 96, .08),
     0 18px 40px rgba(49, 4, 16, .32);
-  animation: dockRise 360ms cubic-bezier(.16, 1, .3, 1) both;
+  animation: dockRise 360ms var(--shua-ease) both;
+  backdrop-filter: blur(20px) saturate(160%);
 }
 
 .dock button {
@@ -729,8 +880,8 @@
   font: inherit;
   padding: 5px 2px;
   transition:
-    transform 240ms cubic-bezier(.32, .72, 0, 1),
-    background 240ms cubic-bezier(.32, .72, 0, 1);
+    transform 240ms var(--shua-bounce),
+    background 240ms var(--shua-bounce);
 }
 
 .dock button:hover,
@@ -738,6 +889,7 @@
   background: rgba(255, 244, 217, .16);
 }
 
+/* Focus visible states */
 .dock button:focus-visible,
 .musicDock:focus-visible,
 .sheetClose:focus-visible,
@@ -766,6 +918,8 @@
   background: rgba(255, 244, 217, .2) !important;
 }
 
+/* ── Music Dock ─────────────────────────── */
+
 .musicDock {
   position: fixed;
   z-index: 35;
@@ -782,16 +936,23 @@
   cursor: pointer;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, .25),
+    0 0 18px rgba(196, 157, 96, .1),
     0 16px 34px rgba(49, 4, 16, .34);
   transition:
-    transform 240ms cubic-bezier(.32, .72, 0, 1),
-    box-shadow 240ms cubic-bezier(.32, .72, 0, 1);
-  animation: dockRise 360ms cubic-bezier(.16, 1, .3, 1) 80ms both;
+    transform 240ms var(--shua-bounce),
+    box-shadow 240ms var(--shua-bounce);
+  animation: dockRise 360ms var(--shua-ease) 80ms both;
 }
 
 .musicDock:hover {
   transform: translateY(-2px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .25),
+    0 0 24px rgba(196, 157, 96, .14),
+    0 20px 40px rgba(49, 4, 16, .38);
 }
+
+/* ── Sheet Backdrop ─────────────────────── */
 
 .sheetBackdrop {
   position: fixed;
@@ -800,22 +961,40 @@
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  background: linear-gradient(180deg, transparent 18%, rgba(38, 3, 13, .42));
+  background: linear-gradient(180deg, transparent 18%, rgba(38, 3, 13, .48));
   padding: 0 12px;
+  animation: backdropIn 200ms ease both;
 }
+
+/* ── Sheet Panel — Frosted glass ────────── */
 
 .sheet {
   width: min(100%, 406px);
   max-height: min(590px, calc(100dvh - 116px));
   overflow-y: auto;
-  border: 1px solid rgba(126, 43, 76, .12);
+  border: 1px solid rgba(196, 157, 96, .14);
   border-radius: 22px;
-  background: #fffafc;
+  background: rgba(255, 250, 252, .92);
   color: #4d1730;
   padding: 18px;
-  box-shadow: 0 -18px 54px rgba(38, 3, 13, .3);
-  animation: sheetIn 260ms cubic-bezier(.32, .72, 0, 1);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .7),
+    0 0 0 1px rgba(196, 157, 96, .05),
+    0 -18px 54px rgba(38, 3, 13, .3);
+  animation: sheetIn 260ms var(--shua-bounce);
   overscroll-behavior: contain;
+  backdrop-filter: blur(24px) saturate(140%);
+}
+
+/* Gold accent line on sheet */
+.sheet::before {
+  content: "";
+  display: block;
+  width: 36px;
+  height: 3px;
+  margin: 0 auto 14px;
+  background: linear-gradient(90deg, var(--shua-gold), rgba(196, 157, 96, .3));
+  border-radius: 3px;
 }
 
 .sheetHeader {
@@ -851,7 +1030,14 @@
   background: var(--shua-button-bg);
   color: var(--shua-button-ink);
   cursor: pointer;
+  transition: transform 200ms var(--shua-bounce);
 }
+
+.sheetClose:hover {
+  transform: scale(1.06);
+}
+
+/* ── Sheet Content Stacks ───────────────── */
 
 .sheetStack,
 .musicSheet,
@@ -882,8 +1068,9 @@
   grid-template-columns: auto 1fr;
   gap: 12px;
   align-items: center;
-  border: 1px solid #ead6df;
-  background: #fff5f9;
+  border: 1px solid rgba(196, 157, 96, .14);
+  border-radius: 14px;
+  background: var(--shua-rose);
   padding: 13px;
 }
 
@@ -915,13 +1102,17 @@
   gap: 9px;
 }
 
+/* ── Gradient Action Button ─────────────── */
+
 .gradientAction {
+  position: relative;
   min-height: 46px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 7px;
   border: 1px solid var(--shua-button-border);
+  border-radius: 14px;
   background: var(--shua-button-bg);
   color: var(--shua-button-ink);
   cursor: pointer;
@@ -931,9 +1122,11 @@
   padding: 10px 12px;
   text-align: center;
   text-decoration: none;
+  overflow: hidden;
   transition:
-    transform 220ms cubic-bezier(.32, .72, 0, 1),
-    filter 220ms cubic-bezier(.32, .72, 0, 1);
+    transform 220ms var(--shua-bounce),
+    filter 220ms var(--shua-bounce),
+    box-shadow 220ms var(--shua-bounce);
 }
 
 .gradientAction:disabled {
@@ -941,6 +1134,8 @@
   filter: grayscale(.5);
   opacity: .6;
 }
+
+/* ── RSVP Form ──────────────────────────── */
 
 .rsvpForm {
   display: grid;
@@ -964,13 +1159,21 @@
 .rsvpForm textarea {
   width: 100%;
   min-width: 0;
-  border: 1px solid #ead6df;
+  border: 1px solid rgba(196, 157, 96, .18);
   border-radius: 14px;
-  background: #fff;
+  background: rgba(255, 255, 255, .9);
   color: #5c1732;
   font: inherit;
   font-size: 15px;
   padding: 12px;
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.rsvpForm input:focus,
+.rsvpForm select:focus,
+.rsvpForm textarea:focus {
+  border-color: rgba(196, 157, 96, .4);
+  box-shadow: 0 0 0 3px rgba(196, 157, 96, .08);
 }
 
 .rsvpForm textarea {
@@ -983,18 +1186,22 @@
 }
 
 .statusText {
-  border: 1px solid #ead6df;
+  border: 1px solid rgba(196, 157, 96, .14);
   border-radius: 14px;
-  background: #fff5f9;
+  background: var(--shua-rose);
   padding: 10px 12px;
 }
 
+/* ── Gift Sheet ─────────────────────────── */
+
 .giftInfo {
-  border: 1px solid #ead6df;
+  border: 1px solid rgba(196, 157, 96, .14);
   border-radius: 16px;
-  background: #fff;
+  background: rgba(255, 255, 255, .9);
   padding: 14px;
 }
+
+/* ── Contact List ───────────────────────── */
 
 .contactList {
   display: grid;
@@ -1006,7 +1213,7 @@
   grid-template-columns: 1fr auto;
   gap: 12px;
   align-items: center;
-  border-bottom: 1px solid #efdae4;
+  border-bottom: 1px solid rgba(196, 157, 96, .1);
   padding-bottom: 12px;
 }
 
@@ -1046,9 +1253,17 @@
   color: var(--shua-button-ink);
   text-decoration: none;
   transition:
-    transform 220ms cubic-bezier(.32, .72, 0, 1),
-    filter 220ms cubic-bezier(.32, .72, 0, 1);
+    transform 220ms var(--shua-bounce),
+    filter 220ms var(--shua-bounce),
+    box-shadow 220ms var(--shua-bounce);
 }
+
+.roundAction:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(49, 4, 16, .2);
+}
+
+/* ── Screen Reader Only ─────────────────── */
 
 .srOnly {
   position: absolute;
@@ -1059,6 +1274,10 @@
   white-space: nowrap;
 }
 
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
 @keyframes sheetIn {
   from {
     opacity: 0;
@@ -1068,6 +1287,11 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+@keyframes backdropIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes textRise {
@@ -1091,6 +1315,49 @@
     transform: translateY(0) scale(1);
   }
 }
+
+@keyframes sealFloat {
+  0%, 100% {
+    transform: translateY(0);
+    box-shadow:
+      0 0 0 1px rgba(196, 157, 96, .18),
+      0 0 30px rgba(196, 157, 96, .08),
+      0 26px 48px rgba(56, 45, 106, .18),
+      0 4px 14px rgba(111, 33, 63, .08);
+  }
+  50% {
+    transform: translateY(-6px);
+    box-shadow:
+      0 0 0 1px rgba(196, 157, 96, .22),
+      0 0 40px rgba(196, 157, 96, .12),
+      0 32px 56px rgba(56, 45, 106, .22),
+      0 8px 20px rgba(111, 33, 63, .1);
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, .24),
+      0 0 24px rgba(196, 157, 96, .12),
+      0 16px 30px rgba(49, 4, 16, .24);
+  }
+  50% {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, .28),
+      0 0 36px rgba(196, 157, 96, .2),
+      0 16px 30px rgba(49, 4, 16, .28);
+  }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
 
 @media (max-width: 520px) {
   .deviceShell {
@@ -1136,6 +1403,10 @@
   }
 }
 
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+
 @media (prefers-reduced-motion: reduce) {
   .sheet,
   .dock,
@@ -1147,7 +1418,12 @@
   .inlineAction,
   .gatePanel,
   .horizontalImageTrack,
-  .invitationPanel > * {
+  .invitationPanel > *,
+  .openingSeal,
+  .sheetBackdrop,
+  .countdownGrid div,
+  .horizontalImageFigure,
+  .horizontalImageFigure img {
     animation: none !important;
     transition-duration: .01ms !important;
   }
