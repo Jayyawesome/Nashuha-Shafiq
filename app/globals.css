@@ -1,0 +1,24 @@
+:root {
+  --font-kad-serif: Georgia, "Times New Roman", serif;
+  --font-kad-script: "Segoe Script", "Brush Script MT", cursive;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  background: #2f0714;
+}
+
+body {
+  min-height: 100%;
+  margin: 0;
+  background: #2f0714;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
