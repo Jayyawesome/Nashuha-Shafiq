@@ -1,6 +1,7 @@
 :root {
   --font-kad-serif: Georgia, "Times New Roman", serif;
   --font-kad-script: "Segoe Script", "Brush Script MT", cursive;
+  --font-kad-sans: "Trebuchet MS", "Gill Sans", sans-serif;
 }
 
 * {

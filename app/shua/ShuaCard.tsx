@@ -3,10 +3,11 @@
 import { type FormEvent, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   CalendarBlank,
+  CaretLeft,
+  CaretRight,
   Clock,
   EnvelopeSimple,
   Gift,
-  Heart,
   MapPin,
   MusicNotes,
   NavigationArrow,
@@ -29,14 +30,13 @@ type DockPanel = "time" | "location" | "rsvp" | "gift" | "contact" | "music";
 type CountdownParts = { days: number; hours: number; minutes: number; seconds: number };
 type RsvpFormState = { name: string; attendance: AttendanceStatus; pax: number; phone: string; wish: string };
 
-const musicUrl = "https://www.youtube.com/watch?v=boRd_GXsYWA";
+const musicUrl = "https://youtu.be/ZeFpigRaXbI?si=HgKqlOVWbGeV0twY";
+const musicStartAt = "01:53";
 const eventDateTime = "2026-08-22T12:00:00+08:00";
 
 const designAssets = {
   opening: "/templates/shua/uploaded-design/Opening%20Gate%20Background.png",
   main: "/templates/shua/uploaded-design/Main%20Page.png",
-  second: "/templates/shua/uploaded-design/Second%20Page.png",
-  textOnly: "/templates/shua/uploaded-design/Text%20Without%20Background.png",
   backgroundSecond: "/templates/shua/uploaded-design/Background%20Second%20Page.png",
   backgroundLast: "/templates/shua/uploaded-design/Background%20Last%20page.png",
 };
@@ -64,6 +64,13 @@ const giftDetails = {
   bank: "Maklumat akaun akan dikemaskini",
   note: "Untuk hadiah atau pertanyaan, sila hubungi pihak keluarga melalui WhatsApp.",
 };
+
+const galleryImages = [
+  { src: designAssets.opening, label: "Bukaan", alt: "Latar pembukaan kad perkahwinan Nashuha dan Shafiq." },
+  { src: designAssets.main, label: "Kad Utama", alt: "Kad utama perkahwinan Nashuha dan Shafiq." },
+  { src: designAssets.backgroundSecond, label: "Jemputan", alt: "Latar jemputan kedua dengan hiasan bunga." },
+  { src: designAssets.backgroundLast, label: "Penutup", alt: "Latar penutup kad perkahwinan Nashuha dan Shafiq." },
+];
 
 const initialForm: RsvpFormState = {
   name: "",
@@ -152,8 +159,7 @@ export function ShuaCard() {
   const playerRef = useRef<YouTubeControllerHandle>(null);
   const sheetRef = useRef<HTMLElement>(null);
   const lastTrigger = useRef<HTMLButtonElement | null>(null);
-  const landingRef = useRef<HTMLElement>(null);
-  const validMusic = useMemo(() => Boolean(buildYouTubeControllerUrl(musicUrl, "00:00", "")), []);
+  const validMusic = useMemo(() => Boolean(buildYouTubeControllerUrl(musicUrl, musicStartAt, "")), []);
   const links = useMemo(() => mapLinks(), []);
 
   const closeSheet = useCallback(() => {
@@ -169,7 +175,6 @@ export function ShuaCard() {
   const openInvitation = () => {
     setOpened(true);
     playerRef.current?.play();
-    requestAnimationFrame(() => landingRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
   };
 
   const updateRsvpForm = (patch: Partial<RsvpFormState>) => {
@@ -252,92 +257,110 @@ export function ShuaCard() {
           <PersistentYouTubePlayer
             ref={playerRef}
             youtubeUrl={musicUrl}
-            startAt="00:00"
+            startAt={musicStartAt}
             endAt=""
             onStateChange={setMusicState}
           />
 
           <article className={styles.card} aria-label="Kad jemputan perkahwinan Nashuha dan Shafiq">
-            <section className={styles.openingPage} aria-labelledby="shua-opening-title">
-              <img className={styles.fullImage} src={designAssets.opening} width={1080} height={1920} alt="" aria-hidden="true" />
+            <section className={styles.openingPage} data-opened={opened} aria-labelledby="shua-opening-title">
+              <img
+                className={`${styles.fullImage} ${styles.openingRevealImage}`}
+                src={designAssets.main}
+                width={1080}
+                height={1920}
+                alt=""
+                aria-hidden="true"
+              />
+              <div className={styles.gatePanels} aria-hidden="true">
+                <span className={`${styles.gatePanel} ${styles.gateLeft}`} />
+                <span className={`${styles.gatePanel} ${styles.gateRight}`} />
+              </div>
               <div className={styles.openingContent}>
-                <p className={styles.monogram}>S&amp;N</p>
-                <p className={styles.openingLabel}>Majlis Perkahwinan</p>
-                <h1 id="shua-opening-title">Nashuha &amp; Shafiq</h1>
-                <p>{eventDetails.dateLabel}</p>
+                <div className={styles.openingSeal}>
+                  <h1 id="shua-opening-title">
+                    <span>Nashuha</span>
+                    <span aria-hidden="true">&amp;</span>
+                    <span>Shafiq</span>
+                  </h1>
+                </div>
                 <button type="button" className={styles.openButton} data-opened={opened} onClick={openInvitation}>
-                  {opened ? "Lihat Kad" : "Buka Kad"}
+                  {opened ? "View Invitation" : "Open The Invitation"}
                 </button>
               </div>
             </section>
 
-            <section ref={landingRef} className={styles.imagePage} aria-labelledby="shua-main-title">
-              <h2 id="shua-main-title" className={styles.srOnly}>
-                Majlis Perkahwinan Nashuha dan Shafiq
-              </h2>
-              <img
-                className={styles.fullImage}
-                src={designAssets.main}
-                width={1080}
-                height={1920}
-                alt="Kad utama Majlis Perkahwinan Nashuha dan Shafiq, Sabtu 22 Ogos 2026, 12 PM hingga 4 PM."
-              />
-            </section>
+            {opened ? (
+              <>
+                <section className={styles.invitationTextPage} aria-labelledby="shua-detail-title">
+                  <img className={styles.fullImage} src={designAssets.backgroundSecond} width={1080} height={1920} alt="" aria-hidden="true" />
+                  <InvitationCopy />
+                </section>
 
-            <section className={styles.landingExtras} aria-labelledby="shua-countdown-title">
-              <img className={styles.fullImage} src={designAssets.backgroundSecond} width={1080} height={1920} alt="" aria-hidden="true" />
-              <div className={styles.extraContent}>
-                <p className={styles.sectionEyebrow}>Menanti hari bahagia</p>
-                <h2 id="shua-countdown-title">Countdown</h2>
-                <CountdownView countdown={countdown} />
+                <section className={styles.eventFlowPage} aria-labelledby="shua-flow-title">
+                  <img className={styles.fullImage} src={designAssets.backgroundSecond} width={1080} height={1920} alt="" aria-hidden="true" />
+                  <div className={styles.flowContent}>
+                    <h2 id="shua-flow-title" className={styles.flowTitle}>
+                      Butiran Majlis
+                    </h2>
 
-                <div className={styles.previewImageCard}>
-                  <img
-                    src={designAssets.textOnly}
-                    width={1080}
-                    height={1920}
-                    alt="Butiran majlis perkahwinan Nashuha dan Shafiq tanpa latar bunga."
-                  />
-                </div>
+                    <section className={styles.kadSection} aria-labelledby="shua-time-title">
+                      <p id="shua-time-title" className={styles.sectionLabel}>
+                        Tarikh &amp; Masa
+                      </p>
+                      <strong>{eventDetails.dateLabel}</strong>
+                      <span>{eventDetails.timeLabel}</span>
+                    </section>
 
-                <WishesPreview wishes={wishes} />
-              </div>
-            </section>
+                    <section className={`${styles.kadSection} ${styles.eventCard}`} aria-labelledby="shua-location-title">
+                      <p id="shua-location-title" className={styles.sectionLabel}>
+                        Lokasi
+                      </p>
+                      <h3>{eventDetails.venueName}</h3>
+                      <span>{eventDetails.venueAddress}</span>
+                    </section>
 
-            <section className={styles.imagePage} aria-labelledby="shua-detail-title">
-              <h2 id="shua-detail-title" className={styles.srOnly}>
-                Butiran lengkap majlis
-              </h2>
-              <img
-                className={styles.fullImage}
-                src={designAssets.second}
-                width={1080}
-                height={1920}
-                alt="Butiran lengkap Walimatulurus Fatin Nashuha Binti Jeffri dan Mohamad Shafiq Bin Mohd Shakri."
-              />
-            </section>
+                    <section className={`${styles.kadSection} ${styles.countdownSection}`} aria-labelledby="shua-countdown-title">
+                      <p id="shua-countdown-title" className={styles.sectionLabel}>
+                        Countdown
+                      </p>
+                      <CountdownView countdown={countdown} />
+                    </section>
 
-            <section className={styles.closingPage} aria-labelledby="shua-rsvp-preview-title">
-              <img className={styles.fullImage} src={designAssets.backgroundLast} width={1080} height={1920} alt="" aria-hidden="true" />
-              <div className={styles.closingContent}>
-                <p className={styles.sectionEyebrow}>Kehadiran anda amat bermakna</p>
-                <h2 id="shua-rsvp-preview-title">RSVP &amp; Gift</h2>
-                <p>
-                  Sahkan kehadiran melalui butang RSVP di bawah. Ucapan anda akan dipaparkan di ruangan wishes dan disimpan ke Excel.
-                </p>
-                <div className={styles.closingGrid}>
-                  <button type="button" className={styles.inlineAction} onClick={(event) => openSheet("rsvp", event.currentTarget)}>
-                    <EnvelopeSimple size={18} weight="light" /> RSVP
-                  </button>
-                  <button type="button" className={styles.inlineAction} onClick={(event) => openSheet("gift", event.currentTarget)}>
-                    <Gift size={18} weight="light" /> Gift
-                  </button>
-                </div>
-              </div>
-            </section>
+                    <section className={`${styles.kadSection} ${styles.gallerySection}`} aria-labelledby="shua-gallery-title">
+                      <p id="shua-gallery-title" className={styles.sectionLabel}>
+                        Galeri
+                      </p>
+                      <HorizontalImageStack />
+                    </section>
+
+                    <WishesPreview wishes={wishes} headingId="shua-wishes-title" />
+                  </div>
+                </section>
+
+                <section className={styles.closingPage} aria-labelledby="shua-rsvp-preview-title">
+                  <img className={styles.fullImage} src={designAssets.backgroundLast} width={1080} height={1920} alt="" aria-hidden="true" />
+                  <div className={styles.closingContent}>
+                    <p className={styles.sectionEyebrow}>Kehadiran anda amat bermakna</p>
+                    <h2 id="shua-rsvp-preview-title">RSVP &amp; Gift</h2>
+                    <p>
+                      Sahkan kehadiran dan tinggalkan ucapan. Ucapan terbaru akan dipaparkan di kad ini dan disimpan ke Excel.
+                    </p>
+                    <div className={styles.closingGrid}>
+                      <button type="button" className={styles.inlineAction} onClick={(event) => openSheet("rsvp", event.currentTarget)}>
+                        <EnvelopeSimple size={18} weight="light" /> RSVP
+                      </button>
+                      <button type="button" className={styles.inlineAction} onClick={(event) => openSheet("gift", event.currentTarget)}>
+                        <Gift size={18} weight="light" /> Gift
+                      </button>
+                    </div>
+                  </div>
+                </section>
+              </>
+            ) : null}
           </article>
 
-          {active ? (
+          {active && opened ? (
             <div className={styles.sheetBackdrop} onPointerDown={(event) => event.target === event.currentTarget && closeSheet()}>
               <section
                 id="shua-action-sheet"
@@ -377,7 +400,7 @@ export function ShuaCard() {
             </div>
           ) : null}
 
-          {validMusic ? (
+          {opened && validMusic ? (
             <button
               ref={active === "music" ? lastTrigger : undefined}
               className={`${styles.musicDock} ${active === "music" ? styles.activeDock : ""}`}
@@ -391,13 +414,15 @@ export function ShuaCard() {
             </button>
           ) : null}
 
-          <nav className={styles.dock} aria-label="Menu jemputan">
-            <DockButton active={active === "time"} icon={<Clock size={18} weight="light" />} label="Masa" onClick={(event) => openSheet("time", event.currentTarget)} />
-            <DockButton active={active === "location"} icon={<MapPin size={18} weight="light" />} label="Lokasi" onClick={(event) => openSheet("location", event.currentTarget)} />
-            <DockButton active={active === "rsvp"} icon={<EnvelopeSimple size={18} weight="light" />} label="RSVP" onClick={(event) => openSheet("rsvp", event.currentTarget)} />
-            <DockButton active={active === "gift"} icon={<Gift size={18} weight="light" />} label="Gift" onClick={(event) => openSheet("gift", event.currentTarget)} />
-            <DockButton active={active === "contact"} icon={<Phone size={18} weight="light" />} label="Hubungi" onClick={(event) => openSheet("contact", event.currentTarget)} />
-          </nav>
+          {opened ? (
+            <nav className={styles.dock} aria-label="Menu jemputan">
+              <DockButton active={active === "time"} icon={<Clock size={18} weight="light" />} label="Masa" onClick={(event) => openSheet("time", event.currentTarget)} />
+              <DockButton active={active === "location"} icon={<MapPin size={18} weight="light" />} label="Lokasi" onClick={(event) => openSheet("location", event.currentTarget)} />
+              <DockButton active={active === "rsvp"} icon={<EnvelopeSimple size={18} weight="light" />} label="RSVP" onClick={(event) => openSheet("rsvp", event.currentTarget)} />
+              <DockButton active={active === "gift"} icon={<Gift size={18} weight="light" />} label="Gift" onClick={(event) => openSheet("gift", event.currentTarget)} />
+              <DockButton active={active === "contact"} icon={<Phone size={18} weight="light" />} label="Hubungi" onClick={(event) => openSheet("contact", event.currentTarget)} />
+            </nav>
+          ) : null}
         </div>
       </div>
     </main>
@@ -438,6 +463,32 @@ function DockButton({
   );
 }
 
+function InvitationCopy() {
+  return (
+    <div className={styles.invitationPanel}>
+      <p className={styles.hostNames}>
+        <span>Jeffri Bin Mat Jaafar</span>
+        <span>&amp;</span>
+        <span>Sarina Binti Mat Din @ Samsudin</span>
+      </p>
+      <h2 id="shua-detail-title">Walimatulurus</h2>
+      <p className={styles.invitePoem}>
+        Setepak sirih, sekacip pinang, semekar senyuman, seikhlas hati
+        <br />
+        Dengan penuh kesyukuran ke hadrat Ilahi
+      </p>
+      <p className={styles.guestInvite}>Mengundang Dato&apos; / Datin / Tuan / Puan / Encik / Cik</p>
+      <p className={styles.guestDots}>.......................................................................................................................</p>
+      <p className={styles.inviteNote}>ke majlis perkahwinan anakanda kami</p>
+      <p className={styles.coupleNames}>
+        <span>Fatin Nashuha Binti Jeffri</span>
+        <span>&amp;</span>
+        <span>Mohamad Shafiq Bin Mohd Shakri</span>
+      </p>
+    </div>
+  );
+}
+
 function CountdownView({ countdown }: { countdown: CountdownParts }) {
   const items = [
     ["Hari", countdown.days],
@@ -457,19 +508,98 @@ function CountdownView({ countdown }: { countdown: CountdownParts }) {
   );
 }
 
-function WishesPreview({ wishes }: { wishes: RsvpSubmission[] }) {
+function HorizontalImageStack() {
+  const [active, setActive] = useState(0);
+  const [offset, setOffset] = useState(0);
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  const syncOffset = useCallback((index: number) => {
+    const track = trackRef.current;
+    const target = track?.children.item(index) as HTMLElement | null;
+    const first = track?.children.item(0) as HTMLElement | null;
+    if (!track || !target || !first) {
+      setOffset(0);
+      return;
+    }
+
+    setOffset(Math.max(0, target.offsetLeft - first.offsetLeft));
+  }, []);
+
+  useEffect(() => {
+    syncOffset(active);
+  }, [active, syncOffset]);
+
+  useEffect(() => {
+    const onResize = () => syncOffset(active);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [active, syncOffset]);
+
+  const goTo = (index: number) => {
+    const next = Math.max(0, Math.min(galleryImages.length - 1, index));
+    setActive(next);
+    syncOffset(next);
+  };
+
   return (
-    <section className={styles.wishesPreview} aria-labelledby="shua-wishes-title">
-      <div>
-        <Heart size={24} weight="fill" />
-        <h3 id="shua-wishes-title">Wishes</h3>
+    <section
+      className={styles.horizontalImageStack}
+      role="region"
+      aria-label="Galeri gambar Shua"
+      tabIndex={0}
+      onKeyDown={(event) => {
+        if (event.key === "ArrowLeft") {
+          event.preventDefault();
+          goTo(active - 1);
+        }
+        if (event.key === "ArrowRight") {
+          event.preventDefault();
+          goTo(active + 1);
+        }
+      }}
+    >
+      <div ref={trackRef} className={styles.horizontalImageTrack} style={{ marginLeft: `-${offset}px` }}>
+        {galleryImages.map((image) => (
+          <figure key={image.label} className={styles.horizontalImageFigure}>
+            <img src={image.src} width={1080} height={1920} alt={image.alt} loading="lazy" />
+            <figcaption>{image.label}</figcaption>
+          </figure>
+        ))}
       </div>
-      {wishes.slice(0, 3).map((wish) => (
-        <article key={`${wish.timestamp}-${wish.name}`}>
-          <p>&quot;{wish.wish || "Semoga majlis berjalan lancar."}&quot;</p>
-          <strong>{wish.name}</strong>
-        </article>
-      ))}
+      <div className={styles.horizontalImageFooter}>
+        <span aria-live="polite">
+          {active + 1} / {galleryImages.length}
+        </span>
+        <div>
+          <button type="button" aria-label="Foto sebelumnya" disabled={active === 0} onClick={() => goTo(active - 1)}>
+            <CaretLeft size={18} weight="bold" />
+          </button>
+          <button type="button" aria-label="Foto seterusnya" disabled={active === galleryImages.length - 1} onClick={() => goTo(active + 1)}>
+            <CaretRight size={18} weight="bold" />
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function WishesPreview({ wishes, headingId }: { wishes: RsvpSubmission[]; headingId: string }) {
+  const recentWishes = wishes.slice(0, 3);
+  return (
+    <section className={`${styles.kadSection} ${styles.wishesPreview}`} aria-labelledby={headingId}>
+      <p id={headingId} className={styles.sectionLabel}>
+        Wishes from RSVP
+      </p>
+      {recentWishes.length ? (
+        recentWishes.map((wish) => (
+          <article key={`${wish.timestamp}-${wish.name}`}>
+            <p>&quot;{wish.wish || "Semoga majlis berjalan lancar."}&quot;</p>
+            <strong>{wish.name}</strong>
+          </article>
+        ))
+      ) : (
+        <p>Ucapan tetamu akan dipaparkan di sini selepas RSVP dihantar.</p>
+      )}
     </section>
   );
 }
@@ -607,8 +737,12 @@ function SheetContent({
             <EnvelopeSimple size={18} weight="light" /> {isSubmitting ? "Menyimpan..." : "Hantar RSVP"}
           </button>
         </form>
-        {rsvpStatus ? <p className={styles.statusText} role="status">{rsvpStatus}</p> : null}
-        <WishesPreview wishes={wishes} />
+        {rsvpStatus ? (
+          <p className={styles.statusText} role="status">
+            {rsvpStatus}
+          </p>
+        ) : null}
+        <WishesPreview wishes={wishes} headingId="shua-rsvp-sheet-wishes-title" />
       </div>
     );
   }
@@ -640,7 +774,7 @@ function SheetContent({
     return (
       <div className={styles.contactList}>
         {contacts.map((contact) => {
-          const links = malaysiaPhoneLinks(contact.phone);
+          const contactLinks = malaysiaPhoneLinks(contact.phone);
           return (
             <article key={contact.name}>
               <div>
@@ -650,10 +784,10 @@ function SheetContent({
                 </span>
               </div>
               <div className={styles.contactActions}>
-                <a className={styles.roundAction} href={links.tel} aria-label={`Panggil ${contact.name}`}>
+                <a className={styles.roundAction} href={contactLinks.tel} aria-label={`Panggil ${contact.name}`}>
                   <Phone size={18} weight="light" />
                 </a>
-                <a className={styles.roundAction} href={links.whatsapp} target="_blank" rel="noreferrer" aria-label={`WhatsApp ${contact.name}`}>
+                <a className={styles.roundAction} href={contactLinks.whatsapp} target="_blank" rel="noreferrer" aria-label={`WhatsApp ${contact.name}`}>
                   <WhatsappLogo size={18} weight="light" />
                 </a>
               </div>
